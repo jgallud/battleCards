@@ -65,6 +65,13 @@ app.get('/enviarClave/:email',function(request,response){
 	})
 });
 
+app.delete("/eliminarUsuario/:uid",function(request,response){
+    var uid=request.params.uid;
+    juego.eliminarUsuario(uid,function(result){
+        response.send(result);
+    });
+});
+
 app.get("/agregarUsuario/:nombre",function(request,response){
 	//var usr1=new modelo.Usuario(request.params.nombre);
 	//deprecated

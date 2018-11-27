@@ -54,7 +54,17 @@ function Dao(){
             callback(result);
         });
     }
+    this.eliminarUsuario=function(uid,callback){
+       eliminar(this.usuarios,{_id:ObjectID(uid)},callback);
+    }
 
+    function eliminar(coleccion,criterio,callback){
+        coleccion.remove(criterio,function(err,result){
+            if(!err){
+                callback(result);
+            }
+        });
+    }
 
 
 	this.conectar=function(callback){

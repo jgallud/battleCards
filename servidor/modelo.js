@@ -86,6 +86,24 @@ function Juego(){
 		this.usuarios.push(usuario);
 		//usuario.id=this.usuarios.length-1;
 	}
+	this.eliminarUsuario=function(uid,callback){
+		var json={'resultados':-1};
+		//if (ObjectID.isValid(uid)){
+			this.dao.eliminarUsuario(uid,function(result){
+	            if (result.result.n==0){
+	                console.log("No se pudo eliminar de usuarios");
+	            }
+	            else{
+	                json={"resultados":1};
+	                console.log("Usuario eliminado de usuarios");
+	                callback(json);
+	            }
+	        }); 
+		//}
+	    //else{
+	    //	callback(json);
+	    //}
+	}
 	this.crearColeccion=function(){
 		var mazo=[];
 		//10 ataque 5 coste 3 vida 5

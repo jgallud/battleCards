@@ -115,4 +115,21 @@ function ClienteRest(){
 	      });
 	  }
 	}
+	this.eliminarUsuario=function(){
+	  var usr=JSON.parse($.cookie("usr"));
+	  $.ajax({
+	    type:'DELETE',
+	    url:'/eliminarUsuario/'+usr._id,//$.cookie("uid"),
+	    data:'{}',
+	    success:function(data){
+	      if (data.resultados==1)
+	      {
+	        //eliminarCookies();
+	        mostrarLogin();
+	      }
+	      },
+	    contentType:'application/json',
+	    dataType:'json'
+	  });
+	}
 }
