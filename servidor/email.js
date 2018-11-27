@@ -1,4 +1,4 @@
-var sendgrid = require("sendgrid")("xxxx","xxxxxxxx");
+var sendgrid = require("sendgrid")("xxxxxxx","xxxxxxxx");
 
 //var url="https://battlecards.herokuapp.com/";
 var url="http://127.0.0.1:5000/";
