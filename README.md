@@ -1,6 +1,8 @@
 # Proyecto 2018: BattleCards
 
-Este repositorio tiene los elementos de la arquitectura base del proyecto 2018: BattleCards
+Este repositorio recoge el desarrollo ágil del proyecto de la asignatura Procesos de Ingeniería del Software (ESIIAB-Universidad de Castilla-La Mancha) del curso 2018-2019: BattleCards.
+
+La versión desplegada de este proyecto se puede encontrar en el siguiente enlace: [BattleCardsApp](https://battlecardsapp.herokuapp.com/)
 
 ### Sprint 1: Definición del proyecto y herramientas
 El objetivo es implementar una solución SaaS.
