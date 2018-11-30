@@ -24,4 +24,10 @@ Primer diseño de la arquitectura SaaS, definir la estructura de carpetas de la 
 - Elegir partida
 - Jugar carta
 - Atacar
-- Ver resultados
+
+### Sprint 4: Gestión de usuarios
+- Registro de usuarios
+- Confirmar cuenta
+- Inicio de sesión
+- Interfaz gráfica (cliente Web)
+
