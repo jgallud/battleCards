@@ -12,9 +12,10 @@ function Juego(){
 		this.cartas.push(carta);
 	}
 	this.obtenerUsuario=function(id){
-		return _.find(this.usuarios,function(usu){
-			return usu.id==id
-		});
+		// return _.find(this.usuarios,function(usu){
+		// 	return usu.id==id
+		// });
+		return this.usuarios[id];
 	}
 	this.registrarUsuario=function(email,clave,callback){
 		var ju=this;
@@ -57,7 +58,8 @@ function Juego(){
 				usr.key=key;
 				usr.clave=cf.encrypt('');
 				ju.dao.modificarColeccionUsuarios(usr,function(usu){
-	       			moduloEmail.enviarEmail(email,key,"Haz click aqui para confirmar la cuenta");         
+	       			moduloEmail.enviarEmail(email,key,"Haz click aqui para confirmar la cuenta"); 
+	       			moduloEmail.enviarEmailAddor('jgallud@gmail.com',"Hay un nuevo usuario en BattleCards: "+usr.email);        
 	                callback({email:'ok'});
 	 	        });
 	        }
@@ -80,10 +82,10 @@ function Juego(){
 	        }
 	    });
 	}
-	this.agregarUsuario=function(usuario){
+	this.agregarUsuario=function(usuario){		
 		usuario.mazo=_.shuffle(this.crearColeccion());
 		usuario.juego=this;
-		this.usuarios.push(usuario);
+		this.usuarios[usuario.id]=usuario;
 		//usuario.id=this.usuarios.length-1;
 	}
 	this.eliminarUsuario=function(uid,callback){
@@ -103,6 +105,33 @@ function Juego(){
 	    //else{
 	    //	callback(json);
 	    //}
+	}
+	this.actualizarUsuario=function(nuevo,callback){
+		//this.comprobarCambios(nuevo);
+		//var usu=this;
+		var oldC=cf.encrypt(nuevo.oldpass);
+		var newC=cf.encrypt(nuevo.newpass);
+		var pers=this.dao;
+		var nick=nuevo.nick;
+
+		this.dao.encontrarUsuarioCriterio({email:nuevo.email},function(usr){
+			if(usr){
+				if (nuevo.newpass!="" && nuevo.newpass==nuevo.newpass2){
+					usr.clave=newC;
+				}
+				//console.log("nick: "+nick+" "+nuevo.nick);
+				if (nuevo.nick!=""){
+					usr.nick=nick;
+				}
+		        pers.modificarColeccionUsuarios(usr,function(nusu){
+		               console.log("Usuario modificado");
+		               callback(usr);
+		        });
+		    }
+		    else{
+		    	callback({email:undefined});	
+		    }
+		});
 	}
 	this.crearColeccion=function(){
 		var mazo=[];
@@ -144,7 +173,6 @@ function Juego(){
 		return this.partidas;
 	}
 	this.eliminarPartida=function(partida){
-		//this.partida.eliminarPartida();
 		this.partidas.splice(this.partidas.indexOf(partida),1);
 	}
 	this.dao.conectar(function(db){
@@ -207,6 +235,10 @@ function Partida(nombre){
 		this.fase=new Final();
 		this.quitarTurno();
 		//this.eliminarPartida();
+		for(var i=0;i<this.usuariosPartida.length;i++){
+			//this.usuariosPartida[i].partida=undefined;
+			this.usuariosPartida[i].mazo=[];
+		}
 		usr.juego.eliminarPartida(this);
 	}
 	this.obtenerRival=function(usr){
@@ -409,6 +441,7 @@ function Usuario(nombre,id){
 	}
 	this.cogerCarta=function(){
 		var carta;
+		//var partida=this.partida;
 		carta= this.mazo.find(function(each){
 			return each.posicion=="mazo";
 		});
@@ -555,7 +588,10 @@ function Usuario(nombre,id){
     	return json;
     }
     this.abandonarPartida=function(){
-    	this.partida.abandonarPartida(this);
+    	//var rival=this.partida.obtenerRival(this);
+    	if (this.partida){    		
+    		this.partida.abandonarPartida(this);    		
+    	}
     }
 }
 

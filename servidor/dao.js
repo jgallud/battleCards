@@ -67,9 +67,10 @@ function Dao(){
     }
 
 
+
 	this.conectar=function(callback){
         var dao=this;
-        mongo.connect("mongodb://xxxx:xxxx@xxxxx/xxxx",{useNewUrlParser:true},function(err, database){
+        mongo.connect("xxxxxxxxxxxxxxxxxxxxxxxxxx",{useNewUrlParser:true},function(err, database){
             if (err){
                 console.log("No pudo conectar a la base de datos")
             }
@@ -83,7 +84,6 @@ function Dao(){
                         console.log("tenemos la colección usuarios");                                 
                         dao.usuarios=col;   
                     }
-                    //db.close();
                 });
                 database.close();
                 callback(database);

@@ -6,8 +6,8 @@ describe("El juego de las cartas...", function() {
 
   beforeEach(function() {
     juego=new modelo.Juego();
-    usr1=new modelo.Usuario("pepe");
-    usr2=new modelo.Usuario("juan");
+    usr1=new modelo.Usuario("pepe",0);
+    usr2=new modelo.Usuario("juan",1);
     miturno=new modelo.MiTurno();
     nomiturno=new modelo.NoMiTurno();
     juego.agregarUsuario(usr1);
@@ -19,7 +19,7 @@ describe("El juego de las cartas...", function() {
   describe("Comprobar la fase inicial del juego",function(){
 	  it("Compruebo condiciones iniciales (cartas, partidas, usuario)", function() {
 	    expect(juego.usuarios).toBeDefined();
-	    expect(juego.usuarios.length).toEqual(2);
+	    expect(Object.keys(juego.usuarios).length).toEqual(2);
 	    expect(juego.partidas).toBeDefined();
 	    expect(juego.partidas.length).toEqual(0);
 	    //expect(juego.partidas[0].fase.nombre).toEqual("jugando");
@@ -40,24 +40,22 @@ describe("El juego de las cartas...", function() {
 	   	usr2.eligePartida("prueba");
 	  });
 
-	  it("Compruebo condiciones iniciales (cartas, partidas, usuario)", function(done) {
+	  it("Compruebo condiciones iniciales (cartas, partidas, usuario)", function() {
 	    expect(juego.usuarios).toBeDefined();
-	    expect(juego.usuarios.length).toEqual(2);
+	    expect(Object.keys(juego.usuarios).length).toEqual(2);
 	    expect(juego.partidas).toBeDefined();
 	    expect(juego.partidas.length).toEqual(1);
 	    expect(juego.partidas[0].fase.nombre).toEqual("jugando");
-	    done();
 	  });
 
-	  it("Los usuarios tienen un mazo", function(done){
+	  it("Los usuarios tienen un mazo", function(){
 	    expect(usr1.mazo).toBeDefined();
 	    expect(usr1.mazo.length).toEqual(15);
 	    expect(usr2.mazo).toBeDefined();
 	    expect(usr2.mazo.length).toEqual(15);
-	    done();
 	    });
 
-	  it("Los usuarios tiene mano (5 o 6 cartas)", function(done){
+	    it("Los usuarios tiene mano (5 o 6 cartas)", function(){
 	    	var cont1=0;cont2=0;
 	    	for(var i=0;i<usr1.mazo.length;i++){
 	    		if (usr1.mazo[i].posicion=="mano"){
@@ -76,10 +74,9 @@ describe("El juego de las cartas...", function() {
 		    	expect(cont2).toEqual(6);
 		    	expect(cont1).toEqual(5);
 		    }
-		    done();
 	    });
 
-	   it("agregar pepe y juan el usuario al juego", function(done){
+	   it("agregar pepe y juan el usuario al juego", function(){
 	    //juego.agregarUsuario(usr1);
 	    //juego.agregarUsuario(usr2);
 	    expect(juego.usuarios.length).toEqual(2);
@@ -87,10 +84,9 @@ describe("El juego de las cartas...", function() {
 	    expect(usr1.mazo.length).toEqual(15);
 	    expect(juego.usuarios[1].nombre).toEqual("juan");
 	    expect(usr2.mazo.length).toEqual(15);
-	    done();
 	    });
 
-	   it("Pepe crea una partida, juan la elige y se les asigna las zonas correspondientes", function(done){
+	   it("Pepe crea una partida, juan la elige y se les asigna las zonas correspondientes", function(){
 		    expect(juego.usuarios[0].partida.nombre).toEqual("prueba");
 		    expect(usr1.partida.nombre).toEqual("prueba");
 		    expect(juego.usuarios[1].partida.nombre).toEqual("prueba");
@@ -103,19 +99,17 @@ describe("El juego de las cartas...", function() {
 		    else{
 		    	expect(usr2.turno.meToca()).toBe(true);
 		    }
-		    done();
 	  	});
 
-	   it("Comprobar que funciona pasar turno",function(done){
+	   it("Comprobar que funciona pasar turno",function(){
 	    	usr1.turno=miturno;
 	    	usr2.turno=nomiturno;
 	    	usr1.pasarTurno();
 	    	expect(usr1.turno.meToca()).toEqual(false);
 	    	expect(usr2.turno.meToca()).toEqual(true);
-	    	done();
 	   });
 
-	   it("Al jugar una carta, la carta pasa a la zona de ataque y se decrementa el elixir en 1",function(done){
+	   it("Al jugar una carta, la carta pasa a la zona de ataque y se decrementa el elixir en 1",function(){
 	      //Forzamos el turno para el usr1
 	      usr1.turno=miturno;
 	      usr2.turno=nomiturno;
@@ -127,10 +121,9 @@ describe("El juego de las cartas...", function() {
 	      expect(usr1.elixir).toEqual(0);
 	      expect(usr1.consumido).toEqual(1);
 	      expect(carta.posicion).toEqual("ataque");
-	      done();
 	   });
 
-	   it("Se comprueba que una carta con coste 2 no se pueda jugar en el primer turno pero en el segundo sí",function(done){
+	   it("Se comprueba que una carta con coste 2 no se pueda jugar en el primer turno pero en el segundo sí",function(){
 	      //Forzamos el turno para el usr1
 	      usr1.turno=miturno;
 	      usr2.turno=nomiturno;
@@ -158,10 +151,9 @@ describe("El juego de las cartas...", function() {
 	      usr1.jugarCarta(carta2);
 	      expect(carta2.posicion).toEqual("ataque");
 	      expect(usr1.elixir).toEqual(0);      
-	      done();
 	   });
 
-		it("Un turno completo con ataque", function(done){
+		it("Un turno completo con ataque", function(){
 		      //Forzamos a que tenga 3 de elixir
 		      usr1.elixir=3;
 		      usr2.turno=miturno;
@@ -183,10 +175,9 @@ describe("El juego de las cartas...", function() {
 		      expect(carta1.vidas).toEqual(vidasCarta1-carta2.ataque);
 		      //expect(carta1.posicion).toEqual("cementerio");
 		      expect(carta2.vidas).toEqual(vidasCarta2-carta1.ataque);
-		      done();
 		   });
 
-	 it("El juego termina cuando el usuario se queda sin cartas en el mazo", function(done){
+	 it("El juego termina cuando el usuario se queda sin cartas en el mazo", function(){
 	    usr1.turno=miturno;
 	    usr2.turno=nomiturno;
 
@@ -197,64 +188,60 @@ describe("El juego de las cartas...", function() {
 	    expect(usr1.turno.meToca()).toEqual(false);
 	    expect(usr2.turno.meToca()).toEqual(false);
 	    expect(juego.partidas[0]).toBeUndefined();
-	    done();
 	  });
 
-    it("El juego termina si las vidas de un usuario sean 0", function(done){
-      usr1.turno=miturno;
-      usr2.turno=nomiturno;
-      usr2.vidas=1;
+	    it("El juego termina si las vidas de un usuario sean 0", function(){
+	      usr1.turno=miturno;
+	      usr2.turno=nomiturno;
+	      usr2.vidas=1;
 
-      var carta1=usr1.obtenerUnaCarta();
-      expect(carta1).toBeDefined();
-      expect(carta1.vidas).toBeGreaterThan(0);
-      usr1.jugarCarta(carta1);
-      usr1.ataque(carta1,usr2);
-      expect(usr1.turno.meToca()).toEqual(false);
-      expect(usr1.turno.meToca()).toEqual(false);
-      expect(juego.partidas[0]).toBeUndefined();
-      done();
-    });
+	      var carta1=usr1.obtenerUnaCarta();
+	      expect(carta1).toBeDefined();
+	      expect(carta1.vidas).toBeGreaterThan(0);
+	      usr1.jugarCarta(carta1);
+	      usr1.ataque(carta1,usr2);
+	      expect(usr1.turno.meToca()).toEqual(false);
+	      expect(usr1.turno.meToca()).toEqual(false);
+	      expect(juego.partidas[0]).toBeUndefined();
+	    });
 
-    it ("No hay paso de turno automático, cuando las cartas han sido jugadas", function(done){
-      usr1.turno=miturno;
-      usr2.turno=nomiturno;
-      var carta1=usr1.obtenerUnaCarta();
-      expect(carta1).toBeDefined();
-      usr1.elixir=carta1.coste;
-      usr1.jugarCarta(carta1); 
-      usr1.pasarTurno();
-      usr2.pasarTurno();
-      var carta2=usr1.obtenerUnaCarta();
-      expect(carta2).toBeDefined();
-      usr1.elixir=carta2.coste;
-      usr1.jugarCarta(carta2);
-      usr1.ataque(carta1,usr2);
-      expect(usr1.turno.meToca()).toEqual(true);
-      expect(usr2.turno.meToca()).toEqual(false);
-      usr1.ataque(carta2,usr2);
-      expect(usr1.turno.meToca()).toEqual(true);
-      expect(usr2.turno.meToca()).toEqual(false);     
-      done();
-    });
-    it ("Si el numero de cartas excede el maximo de capacidad al final del turno se descartan las cartas sobrantes", function(done){
-      //Establecemos el turno para usr1
-      usr1.turno=miturno;
-      usr2.turno=nomiturno;
-      //Usr1 coge cartas para tener mas de 10
-      for(var i=0;i<6;i++){
-        usr1.cogerCarta();
-      }
-      var cartas=usr1.obtenerCartasMano();
-      expect(cartas).toBeDefined();
-      expect(cartas.length).toBeGreaterThan(10);
-      //Al pasar turno se descartan las cartas sobrantes, enviandolas al cementerio
-      usr1.pasarTurno();
-      //expect(usr1.turno.meToca()).toEqual(false);
-      //expect(usr2.turno.meToca()).toEqual(true);
-      expect (usr1.obtenerCartasMano().length).toEqual(10);
-      done();
-    });
+	    it ("No hay paso de turno automático, cuando las cartas han sido jugadas", function(){
+	      usr1.turno=miturno;
+	      usr2.turno=nomiturno;
+	      var carta1=usr1.obtenerUnaCarta();
+	      expect(carta1).toBeDefined();
+	      usr1.elixir=carta1.coste;
+	      usr1.jugarCarta(carta1); 
+	      usr1.pasarTurno();
+	      usr2.pasarTurno();
+	      var carta2=usr1.obtenerUnaCarta();
+	      expect(carta2).toBeDefined();
+	      usr1.elixir=carta2.coste;
+	      usr1.jugarCarta(carta2);
+	      usr1.ataque(carta1,usr2);
+	      expect(usr1.turno.meToca()).toEqual(true);
+	      expect(usr2.turno.meToca()).toEqual(false);
+	      usr1.ataque(carta2,usr2);
+	      expect(usr1.turno.meToca()).toEqual(true);
+	      expect(usr2.turno.meToca()).toEqual(false);     
+	    });
+	    it ("Si el numero de cartas excede el maximo de capacidad al final del turno se descartan las cartas sobrantes", function(){
+	      //Establecemos el turno para usr1
+	      usr1.turno=miturno;
+	      usr2.turno=nomiturno;
+	      //Usr1 coge cartas para tener mas de 10
+	      for(var i=0;i<6;i++){
+	        usr1.cogerCarta();
+	      }
+	      var cartas=usr1.obtenerCartasMano();
+	      expect(cartas).toBeDefined();
+	      expect(cartas.length).toBeGreaterThan(10);
+	      //Al pasar turno se descartan las cartas sobrantes, enviandolas al cementerio
+	      usr1.pasarTurno();
+	      //expect(usr1.turno.meToca()).toEqual(false);
+	      //expect(usr2.turno.meToca()).toEqual(true);
+	      expect (usr1.obtenerCartasMano().length).toEqual(10);
+	    });
   });
 });
 
